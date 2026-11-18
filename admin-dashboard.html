@@ -1,12 +1,353 @@
+
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NPFA Admin Preview</title><link rel="stylesheet" href="styles.css"><style>
-body{background:#f5f4f2}.admin-wrap{max-width:1100px;margin:auto;padding:35px 5%}.admin-top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:30px}.admin-top h1{font-size:30px;color:var(--maroon);margin:0}.preview{background:#fff;border:1px solid #e6e1dd;padding:24px;margin-bottom:18px;border-radius:5px}.preview h2{font-size:19px;margin-bottom:8px}.warning{border-left:4px solid #c58a2b;background:#fff8e9;padding:15px;font-size:13px}.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.tile{background:#fff;padding:20px;border:1px solid #e6e1dd}.tile b{display:block;font-size:25px;color:var(--maroon)}.tile span{font-size:12px;color:#666}@media(max-width:650px){.tiles{grid-template-columns:1fr}.admin-top{align-items:flex-start;flex-direction:column}}
-</style></head><body><div class="admin-wrap">
-<div class="admin-top"><div><p class="eyebrow red">STAFF AREA · PREVIEW</p><h1>NPFA Dashboard</h1></div><a class="btn btn-dark" href="index.html">View website</a></div>
-<div class="warning"><b>Preview only:</b> This dashboard is not connected to a live database or staff login. Do not enter real player or staff information here. An authorised adult administrator must complete and review the secure setup.</div>
-<div class="tiles" style="margin:20px 0"><div class="tile"><b>U7–U15</b><span>Age groups configured</span></div><div class="tile"><b>6</b><span>Planned database tables</span></div><div class="tile"><b>3</b><span>Planned staff roles</span></div></div>
-<div class="preview"><h2>Players</h2><p class="muted">Player records will use a generated code and only the minimum necessary information. Do not add children's personal details until privacy, consent and access controls are approved.</p></div>
-<div class="preview"><h2>Coaches</h2><p class="muted">Coach profiles and role permissions will be managed by an authorised academy administrator.</p></div>
-<div class="preview"><h2>Fixtures & results</h2><p class="muted">Future youth fixture locations and timings should remain staff-only unless an authorised adult has reviewed publication.</p></div>
-<div class="preview"><h2>Announcements</h2><p class="muted">Only approved announcements should appear on the public website.</p></div>
-</div></body></html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NPFA Admin Dashboard</title>
+<style>
+:root{--maroon:#6f3438;--blue:#78b5dc;--dark:#171719}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:var(--dark)}
+header{background:var(--dark);color:white;padding:20px}
+header h1{margin:0;color:white;font-size:23px}
+header p{margin:7px 0 0}
+nav{display:flex;gap:8px;overflow-x:auto;padding:12px;background:white}
+nav button,.action{border:0;border-radius:6px;padding:11px 14px;background:var(--maroon);color:white;cursor:pointer}
+main{max-width:950px;margin:auto;padding:16px}
+section{display:none;background:white;padding:18px;border-radius:10px;margin-bottom:18px}
+section.active{display:block}
+h2{color:var(--maroon);margin-top:0}
+form{display:grid;gap:10px;margin-bottom:20px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:6px;font-size:16px}
+textarea{min-height:90px}
+button:disabled{opacity:.5}
+.item{border:1px solid #ddd;border-radius:7px;padding:12px;margin:10px 0;overflow-wrap:anywhere}
+.item button{margin:8px 5px 0 0}
+.delete{background:#a52626}
+.small{font-size:13px;color:#555}
+#message{padding:12px;background:#fff3cd;border-radius:6px;display:none}
+</style>
+</head>
+<body>
+<header>
+<h1>NPFA Admin Dashboard</h1>
+<p>Naivasha Premier Soccer Academy</p>
+<p id="staffName">Checking administrator access...</p>
+<button id="logout" class="action">Sign Out</button>
+</header>
+
+<nav>
+<button data-tab="players">Players</button>
+<button data-tab="coaches">Coaches</button>
+<button data-tab="fixtures">Fixtures</button>
+<button data-tab="results">Results</button>
+<button data-tab="announcements">Announcements</button>
+</nav>
+
+<main>
+<p id="message" role="status"></p>
+
+<section id="players" class="active">
+<h2>Player Register</h2>
+<p class="small">Use player codes only. Do not enter children's names or personal contact details.</p>
+<form id="playerForm">
+<input name="player_code" placeholder="Player code (e.g. NPFA-001)" required>
+<select name="age_group" required>
+<option value="">Select age group</option>
+<option>Under 7</option><option>Under 9</option>
+<option>Under 11</option><option>Under 13</option><option>Under 15</option>
+</select>
+<select name="consent_status">
+<option value="pending">Consent pending</option>
+<option value="granted">Consent granted</option>
+<option value="withdrawn">Consent withdrawn</option>
+</select>
+<input name="consent_checked_on" type="date">
+<select name="status">
+<option value="active">Active</option>
+<option value="inactive">Inactive</option>
+</select>
+<button class="action">Add Player</button>
+</form>
+<div id="playerList"></div>
+</section>
+
+<section id="coaches">
+<h2>Coach Management</h2>
+<form id="coachForm">
+<input name="display_name" placeholder="Coach name" required>
+<input name="role_title" placeholder="Role/title">
+<input name="assigned_age_groups" placeholder="Age groups, e.g. Under 9, Under 11">
+<select name="status"><option value="active">Active</option><option value="inactive">Inactive</option></select>
+<button class="action">Add Coach</button>
+</form>
+<div id="coachList"></div>
+</section>
+
+<section id="fixtures">
+<h2>Fixtures</h2>
+<p class="small">Fixtures are visible to authorised staff only.</p>
+<form id="fixtureForm">
+<select name="age_group" required>
+<option value="">Select age group</option>
+<option>Under 7</option><option>Under 9</option>
+<option>Under 11</option><option>Under 13</option><option>Under 15</option>
+</select>
+<input name="opponent" placeholder="Opponent" required>
+<label>Kick-off date and time</label>
+<input name="kickoff_at" type="datetime-local" required>
+<input name="venue" placeholder="Venue (staff-only)">
+<select name="status">
+<option value="draft">Draft</option>
+<option value="published">Published</option>
+<option value="completed">Completed</option>
+<option value="cancelled">Cancelled</option>
+</select>
+<button class="action">Add Fixture</button>
+</form>
+<div id="fixtureList"></div>
+</section>
+
+<section id="results">
+<h2>Match Results</h2>
+<form id="resultForm">
+<select name="fixture_id" id="resultFixture" required>
+<option value="">Select fixture</option>
+</select>
+<input name="home_score" type="number" min="0" step="1" placeholder="NPFA score" required>
+<input name="away_score" type="number" min="0" step="1" placeholder="Opponent score" required>
+<button class="action">Save Result</button>
+</form>
+<div id="resultList"></div>
+</section>
+
+<section id="announcements">
+<h2>Announcements</h2>
+<form id="announcementForm">
+<input name="title" placeholder="Announcement title" required>
+<textarea name="body" placeholder="Announcement details" required></textarea>
+<select name="status">
+<option value="draft">Save as draft</option>
+<option value="published">Publish announcement</option>
+</select>
+<button class="action">Save Announcement</button>
+</form>
+<div id="announcementList"></div>
+</section>
+</main>
+
+<script type="module">
+import {createClient} from "https://esm.sh/@supabase/supabase-js@2";
+import {SUPABASE_URL,SUPABASE_ANON_KEY} from "./admin-config.js";
+
+const supabase=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const $=id=>document.getElementById(id);
+let currentUser=null;
+let fixtures=[];
+
+function message(text){
+  $("message").textContent=text;
+  $("message").style.display="block";
+}
+function clearMessage(){
+  $("message").style.display="none";
+}
+function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function formData(form){
+  return Object.fromEntries(new FormData(form).entries());
+}
+function showItems(id,rows,formatter){
+  $(id).innerHTML=rows.length?rows.map(formatter).join(""):"<p>No records yet.</p>";
+}
+async function load(table,columns="*"){
+  const {data,error}=await supabase.from(table).select(columns).order("created_at",{ascending:false});
+  if(error)throw error;
+  return data||[];
+}
+async function removeRecord(table,id){
+  if(!confirm("Are you sure you want to delete this record?"))return;
+  const {error}=await supabase.from(table).delete().eq("id",id);
+  if(error){message(error.message);return;}
+  message("Record deleted.");
+  await refreshAll();
+}
+
+$("logout").addEventListener("click",async()=>{
+  await supabase.auth.signOut();
+  location.href="./admin-login.html";
+});
+
+document.querySelectorAll("nav button").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.querySelectorAll("main section").forEach(s=>s.classList.remove("active"));
+    $(button.dataset.tab).classList.add("active");
+    clearMessage();
+  });
+});
+
+async function loadPlayers(){
+  const rows=await load("players");
+  showItems("playerList",rows,r=>`
+    <div class="item">
+      <b>${escapeHTML(r.player_code)}</b> — ${escapeHTML(r.age_group)}
+      <p>Consent: ${escapeHTML(r.consent_status)} | Status: ${escapeHTML(r.status)}</p>
+      <button class="action delete" data-delete="players" data-id="${r.id}">Delete</button>
+    </div>`);
+}
+async function loadCoaches(){
+  const rows=await load("coaches");
+  showItems("coachList",rows,r=>`
+    <div class="item">
+      <b>${escapeHTML(r.display_name)}</b>
+      <p>${escapeHTML(r.role_title||"Coach")} | ${escapeHTML((r.assigned_age_groups||[]).join(", "))}</p>
+      <p>Status: ${escapeHTML(r.status)}</p>
+      <button class="action delete" data-delete="coaches" data-id="${r.id}">Delete</button>
+    </div>`);
+}
+async function loadFixtures(){
+  fixtures=await load("fixtures");
+  showItems("fixtureList",fixtures,r=>`
+    <div class="item">
+      <b>${escapeHTML(r.age_group)} vs ${escapeHTML(r.opponent)}</b>
+      <p>${escapeHTML(new Date(r.kickoff_at).toLocaleString())}</p>
+      <p>Venue: ${escapeHTML(r.venue||"Not entered")} | ${escapeHTML(r.status)}</p>
+      <button class="action delete" data-delete="fixtures" data-id="${r.id}">Delete</button>
+    </div>`);
+  $("resultFixture").innerHTML='<option value="">Select fixture</option>'+
+    fixtures.map(f=>`<option value="${f.id}">${escapeHTML(f.age_group+" vs "+f.opponent)}</option>`).join("");
+}
+async function loadResults(){
+  const rows=await supabase.from("results")
+    .select("id,fixture_id,home_score,away_score,created_at,fixtures(age_group,opponent)")
+    .order("created_at",{ascending:false});
+  if(rows.error)throw rows.error;
+  showItems("resultList",rows.data||[],r=>`
+    <div class="item">
+      <b>${escapeHTML(r.fixtures?.age_group||"Fixture")} vs ${escapeHTML(r.fixtures?.opponent||"Opponent")}</b>
+      <p>Score: ${r.home_score} - ${r.away_score}</p>
+      <button class="action delete" data-delete="results" data-id="${r.id}">Delete</button>
+    </div>`);
+}
+async function loadAnnouncements(){
+  const rows=await load("announcements");
+  showItems("announcementList",rows,r=>`
+    <div class="item">
+      <b>${escapeHTML(r.title)}</b>
+      <p>${escapeHTML(r.body)}</p>
+      <p>Status: ${escapeHTML(r.status)}</p>
+      <button class="action delete" data-delete="announcements" data-id="${r.id}">Delete</button>
+    </div>`);
+}
+async function refreshAll(){
+  await Promise.all([
+    loadPlayers(),loadCoaches(),loadFixtures(),
+    loadResults(),loadAnnouncements()
+  ]);
+}
+
+async function saveForm(form,table,prepare=x=>x){
+  const button=form.querySelector("button");
+  button.disabled=true;
+  try{
+    const values=prepare(formData(form));
+    const {error}=await supabase.from(table).insert(values);
+    if(error)throw error;
+    form.reset();
+    message("Saved successfully.");
+    await refreshAll();
+  }catch(e){message("Could not save: "+e.message);}
+  finally{button.disabled=false;}
+}
+
+$("playerForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  saveForm(e.currentTarget,"players",v=>{
+    if(!v.consent_checked_on)delete v.consent_checked_on;
+    return v;
+  });
+});
+$("coachForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  saveForm(e.currentTarget,"coaches",v=>({
+    display_name:v.display_name,
+    role_title:v.role_title||null,
+    assigned_age_groups:v.assigned_age_groups.split(",").map(x=>x.trim()).filter(Boolean),
+    status:v.status
+  }));
+});
+$("fixtureForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  saveForm(e.currentTarget,"fixtures",v=>({
+    age_group:v.age_group,opponent:v.opponent,
+    kickoff_at:new Date(v.kickoff_at).toISOString(),
+    venue:v.venue||null,status:v.status
+  }));
+});
+$("resultForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const form=e.currentTarget;
+  const v=formData(form);
+  const button=form.querySelector("button");
+  button.disabled=true;
+  try{
+    const {error}=await supabase.from("results").upsert({
+      fixture_id:v.fixture_id,
+      home_score:Number(v.home_score),
+      away_score:Number(v.away_score),
+      entered_by:currentUser.id
+    },{onConflict:"fixture_id"});
+    if(error)throw error;
+    form.reset();
+    message("Result saved.");
+    await refreshAll();
+  }catch(err){message("Could not save result: "+err.message);}
+  finally{button.disabled=false;}
+});
+$("announcementForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  saveForm(e.currentTarget,"announcements",v=>({
+    title:v.title,body:v.body,status:v.status,
+    published_at:v.status==="published"?new Date().toISOString():null,
+    created_by:currentUser.id
+  }));
+});
+
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-delete]");
+  if(b)removeRecord(b.dataset.delete,b.dataset.id);
+});
+
+async function start(){
+  try{
+    const {data,error}=await supabase.auth.getUser();
+    if(error||!data.user){
+      location.href="./admin-login.html";
+      return;
+    }
+    currentUser=data.user;
+    const {data:profile,error:profileError}=await supabase
+      .from("staff_profiles")
+      .select("display_name,role,is_active")
+      .eq("user_id",currentUser.id)
+      .maybeSingle();
+    if(profileError||!profile||!profile.is_active||profile.role!=="admin"){
+      await supabase.auth.signOut();
+      location.href="./admin-login.html";
+      return;
+    }
+    $("staffName").textContent="Signed in: "+profile.display_name;
+    await refreshAll();
+    message("Dashboard connected. Your records are ready to manage.");
+  }catch(err){
+    message("Dashboard error: "+err.message);
+  }
+}
+start();
+</script>
+</body>
+</html>
