@@ -6,11 +6,17 @@
 <meta name="description" content="Naivasha Premier Soccer Academy — building skills, confidence and teamwork through football.">
 <title>Naivasha Premier Soccer Academy</title>
 <link rel="stylesheet" href="styles.css">
+<style>
+/* Official NPFA crest */
+.brand-crest-image{width:64px;height:64px;object-fit:contain;display:block;flex:0 0 auto;background:#fff;border-radius:4px}
+.brand{gap:12px}
+@media(max-width:760px){.brand-crest-image{width:54px;height:54px}.brand strong{font-size:11px}.brand small{font-size:9px}}
+</style>
 </head>
 <body>
 <header class="site-header">
   <a class="brand" href="index.html" aria-label="NPFA home">
-    <span class="crest"><b>NP</b><small>FA</small></span>
+    <img class="brand-crest-image" src="npfa-logo.jpg" alt="Naivasha Premier Soccer Academy official crest">
     <span><strong>NAIVASHA PREMIER</strong><small>SOCCER ACADEMY</small></span>
   </a>
   <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
@@ -69,6 +75,6 @@
   </div>
 </section>
 </main>
-<footer><a class="brand footer-brand" href="#"><span class="crest"><b>NP</b><small>FA</small></span><span><strong>NAIVASHA PREMIER</strong><small>SOCCER ACADEMY</small></span></a><p>Learn • Play • Grow</p><p>© <span id="year"></span> Naivasha Premier Soccer Academy</p></footer>
+<footer><a class="brand footer-brand" href="#"><img class="brand-crest-image" src="npfa-logo.jpg" alt="Naivasha Premier Soccer Academy official crest"><span><strong>NAIVASHA PREMIER</strong><small>SOCCER ACADEMY</small></span></a><p>Learn • Play • Grow</p><p>© <span id="year"></span> Naivasha Premier Soccer Academy</p></footer>
 <script src="script.js"></script>
 </body></html>
