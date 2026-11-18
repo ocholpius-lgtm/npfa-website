@@ -22,6 +22,18 @@
 .coach-role{display:block;margin-top:6px;color:#6f3438;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;}
 @media(max-width:760px){.coaches-section{padding:54px 6%;}.coaches-grid{grid-template-columns:1fr;max-width:420px;gap:18px}.coach-photo{height:360px;}}
 
+
+/* Future fixtures and results */
+.fixtures-section{padding:76px 7%;background:#fff}
+.fixtures-heading{max-width:760px;margin:0 auto 30px;text-align:center}
+.fixtures-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;max-width:1100px;margin:auto}
+.fixture-panel{border:1px solid #e8e3e3;border-radius:14px;padding:24px;background:#fafafa}
+.fixture-panel h3{color:#6f3438;margin:0 0 14px}
+.empty-state{border:1px dashed #c9b8b9;border-radius:10px;padding:22px;text-align:center;color:#555;background:#fff}
+.empty-state strong{display:block;color:#171719;margin-bottom:6px}
+.fixture-note{max-width:1100px;margin:18px auto 0;color:#666;font-size:13px;text-align:center}
+@media(max-width:760px){.fixtures-section{padding:54px 6%}.fixtures-panels{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -32,7 +44,7 @@
   </a>
   <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
   <nav class="nav">
-    <a href="#about">About</a><a href="#programmes">Age groups</a><a href="#pathway">Our approach</a><a href="#coaches">Coaches</a><a href="#contact">Contact</a>
+    <a href="#about">About</a><a href="#programmes">Age groups</a><a href="#pathway">Our approach</a><a href="#coaches">Coaches</a><a href="#fixtures">Fixtures & results</a><a href="#contact">Contact</a>
     <a class="nav-cta" href="#contact">Enquire</a>
   </nav>
 </header>
@@ -86,6 +98,19 @@
     <article class="coach-card"><img class="coach-photo" src="coach-noah.jpg" alt="Coach Noah Ayuko with a young player"><h3 class="coach-name">Coach Noah Ayuko<span class="coach-role">Coach</span></h3></article>
     <article class="coach-card"><img class="coach-photo" src="coach-samson.jpg" alt="Coach Samson with an academy player"><h3 class="coach-name">Coach Samson Kaleki<span class="coach-role">Coach</span></h3></article>
   </div>
+</section>
+
+<section class="fixtures-section" id="fixtures">
+  <div class="fixtures-heading">
+    <p class="eyebrow red">MATCH CENTRE</p>
+    <h2>Fixtures & Match Results</h2>
+    <p>Follow upcoming matches and completed games across NPFA age groups. Updates will be published here when fixtures are confirmed.</p>
+  </div>
+  <div class="fixtures-panels">
+    <article class="fixture-panel"><h3>Upcoming Fixtures</h3><div class="empty-state"><strong>No fixtures published yet</strong>Upcoming match dates, opponents, age groups and venues will appear here once confirmed.</div></article>
+    <article class="fixture-panel"><h3>Recent Match Results</h3><div class="empty-state"><strong>No results published yet</strong>Final scores and match summaries will be added after games are completed and approved for publication.</div></article>
+  </div>
+  <p class="fixture-note">Fixture details may change. Please confirm match arrangements with the academy before travelling.</p>
 </section>
 
 <section class="notice section"><div class="notice-mark">✦</div><div><p class="eyebrow red">A SAFE PLACE TO PLAY</p><h2>Every young player matters.</h2><p>Player wellbeing, respectful coaching and parent or guardian involvement are important parts of youth football.</p></div></section>
