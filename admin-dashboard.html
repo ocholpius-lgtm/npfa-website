@@ -1,2 +1,553 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NPFA Administration</title>
+
+<style>
+:root {
+  --maroon:#6f3438;
+  --blue:#78b5dc;
+  --red:#c92f32;
+  --dark:#171719;
+  --light:#f4f5f7;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:var(--light);
+  color:var(--dark);
+}
+header {
+  background:var(--dark);
+  color:white;
+  padding:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+}
+header h1 { margin:0; font-size:21px; }
+header span { color:var(--blue); }
+button {
+  border:0;
+  border-radius:5px;
+  padding:11px 15px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.logout { background:var(--red);color:white; }
+nav {
+  display:flex;
+  gap:8px;
+  padding:12px;
+  overflow-x:auto;
+  background:white;
+}
+nav button {
+  background:#e7e7e7;
+  color:var(--dark);
+  white-space:nowrap;
+}
+nav button.active {
+  background:var(--maroon);
+  color:white;
+}
+main { padding:20px; max-width:1100px; margin:auto; }
+.panel {
+  display:none;
+  background:white;
+  padding:20px;
+  border-radius:9px;
+  margin-bottom:20px;
+}
+.panel.active { display:block; }
+h2 { color:var(--maroon); margin-top:0; }
+form {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:12px;
+  margin-bottom:25px;
+}
+input,select,textarea {
+  width:100%;
+  padding:12px;
+  border:1px solid #ccc;
+  border-radius:5px;
+  font:inherit;
+  background:white;
+}
+textarea { min-height:90px; }
+form button {
+  background:var(--maroon);
+  color:white;
+  align-self:end;
+}
+.message { margin:12px 0; font-weight:bold; }
+table {
+  width:100%;
+  border-collapse:collapse;
+  min-width:550px;
+}
+th,td {
+  border-bottom:1px solid #ddd;
+  padding:11px;
+  text-align:left;
+}
+th { background:#f1f1f1; }
+.table-wrap { overflow-x:auto; }
+.small-note { color:#666;font-size:13px; }
+@media(max-width:600px) {
+  main { padding:12px; }
+  .panel { padding:14px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>NPFA <span>ADMIN DASHBOARD</span></h1>
+  <button class="logout" id="logoutButton">Logout</button>
+</header>
+
+<nav id="tabs">
+  <button data-tab="players" class="active">Players</button>
+  <button data-tab="coaches">Coaches</button>
+  <button data-tab="fixtures">Fixtures</button>
+  <button data-tab="results">Results</button>
+  <button data-tab="announcements">Announcements</button>
+</nav>
+
+<main>
+  <p id="globalMessage" class="message">Loading dashboard...</p>
+
+  <section id="players" class="panel active">
+    <h2>Player Register</h2>
+    <p class="small-note">Use player codes rather than children's names.</p>
+
+    <form id="playerForm">
+      <input id="playerCode" placeholder="Player code" required>
+      <select id="playerAge" required>
+        <option value="">Select age group</option>
+        <option>Under 7</option>
+        <option>Under 9</option>
+        <option>Under 11</option>
+        <option>Under 13</option>
+        <option>Under 15</option>
+      </select>
+      <select id="playerConsent">
+        <option value="pending">Consent pending</option>
+        <option value="granted">Consent granted</option>
+        <option value="withdrawn">Consent withdrawn</option>
+      </select>
+      <button type="submit">Add Player</button>
+    </form>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Player Code</th><th>Age Group</th><th>Consent</th><th>Status</th></tr></thead>
+        <tbody id="playersList"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="coaches" class="panel">
+    <h2>Coaching Team</h2>
+
+    <form id="coachForm">
+      <input id="coachName" placeholder="Coach name" required>
+      <input id="coachTitle" placeholder="Role or title">
+      <button type="submit">Add Coach</button>
+    </form>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Role</th><th>Status</th></tr></thead>
+        <tbody id="coachesList"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="fixtures" class="panel">
+    <h2>Fixtures</h2>
+
+    <form id="fixtureForm">
+      <select id="fixtureAge" required>
+        <option value="">Select age group</option>
+        <option>Under 7</option>
+        <option>Under 9</option>
+        <option>Under 11</option>
+        <option>Under 13</option>
+        <option>Under 15</option>
+      </select>
+      <input id="opponent" placeholder="Opponent" required>
+      <input id="kickoff" type="datetime-local" required>
+      <input id="venue" placeholder="Venue">
+      <button type="submit">Add Fixture</button>
+    </form>
+
+    <p class="small-note">Fixtures are visible only to authorised staff in this database setup.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Age Group</th><th>Opponent</th><th>Kickoff</th><th>Status</th></tr></thead>
+        <tbody id="fixturesList"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="results" class="panel">
+    <h2>Match Results</h2>
+
+    <form id="resultForm">
+      <select id="resultFixture" required>
+        <option value="">Select completed fixture</option>
+      </select>
+      <input id="homeScore" type="number" min="0" step="1" placeholder="NPFA score" required>
+      <input id="awayScore" type="number" min="0" step="1" placeholder="Opponent score" required>
+      <button type="submit">Save Result</button>
+    </form>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Fixture</th><th>NPFA</th><th>Opponent</th></tr></thead>
+        <tbody id="resultsList"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="announcements" class="panel">
+    <h2>Academy Announcements</h2>
+
+    <form id="announcementForm">
+      <input id="announcementTitle" placeholder="Announcement title" required>
+      <textarea id="announcementBody" placeholder="Write announcement..." required></textarea>
+      <select id="announcementStatus">
+        <option value="draft">Save as draft</option>
+        <option value="published">Publish announcement</option>
+      </select>
+      <button type="submit">Save Announcement</button>
+    </form>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Title</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody id="announcementsList"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./admin-config.js";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const message = document.getElementById("globalMessage");
+let currentRole = null;
+let fixturesCache = [];
+
+function showMessage(text, isError = false) {
+  message.textContent = text;
+  message.style.color = isError ? "#c92f32" : "#28743a";
+}
+
+function addCell(row, value) {
+  const cell = document.createElement("td");
+  cell.textContent = value ?? "";
+  row.appendChild(cell);
+}
+
+function fillTable(id, rows, columns) {
+  const body = document.getElementById(id);
+  body.replaceChildren();
+
+  if (!rows.length) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = columns;
+    cell.textContent = "No records found.";
+    row.appendChild(cell);
+    body.appendChild(row);
+    return;
+  }
+
+  rows.forEach(item => {
+    const row = document.createElement("tr");
+    item.forEach(value => addCell(row, value));
+    body.appendChild(row);
+  });
+}
+
+async function checkAccess() {
+  const { data: { session }, error } = await supabase.auth.getSession();
+
+  if (error || !session) {
+    window.location.replace("./admin-login.html");
+    return false;
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from("staff_profiles")
+    .select("role,is_active")
+    .eq("user_id", session.user.id)
+    .maybeSingle();
+
+  if (profileError || !profile || !profile.is_active) {
+    await supabase.auth.signOut();
+    window.location.replace("./admin-login.html");
+    return false;
+  }
+
+  currentRole = profile.role;
+  return true;
+}
+
+function setPermissions() {
+  if (currentRole === "coach") {
+    document.querySelector('[data-tab="players"]').remove();
+    document.querySelector('[data-tab="announcements"]').remove();
+    document.getElementById("playerForm").remove();
+    document.getElementById("coachForm").remove();
+    document.getElementById("fixtureForm").remove();
+    document.getElementById("resultForm").remove();
+  }
+
+  if (currentRole === "editor") {
+    document.getElementById("playerForm").remove();
+  }
+}
+
+async function loadPlayers() {
+  const { data, error } = await supabase
+    .from("players")
+    .select("player_code,age_group,consent_status,status")
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  fillTable("playersList", data.map(p => [
+    p.player_code, p.age_group, p.consent_status, p.status
+  ]), 4);
+}
+
+async function loadCoaches() {
+  const { data, error } = await supabase
+    .from("coaches")
+    .select("display_name,role_title,status")
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  fillTable("coachesList", data.map(c => [
+    c.display_name, c.role_title || "-", c.status
+  ]), 3);
+}
+
+async function loadFixtures() {
+  const { data, error } = await supabase
+    .from("fixtures")
+    .select("id,age_group,opponent,kickoff_at,status")
+    .order("kickoff_at", { ascending: true });
+
+  if (error) throw error;
+  fixturesCache = data;
+
+  fillTable("fixturesList", data.map(f => [
+    f.age_group,
+    f.opponent,
+    new Date(f.kickoff_at).toLocaleString(),
+    f.status
+  ]), 4);
+
+  const select = document.getElementById("resultFixture");
+  select.replaceChildren();
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = "Select completed fixture";
+  select.appendChild(placeholder);
+
+  data.forEach(f => {
+    const option = document.createElement("option");
+    option.value = f.id;
+    option.textContent = `${f.age_group} vs ${f.opponent}`;
+    select.appendChild(option);
+  });
+}
+
+async function loadResults() {
+  const { data, error } = await supabase
+    .from("results")
+    .select("home_score,away_score,fixtures(age_group,opponent)");
+
+  if (error) throw error;
+
+  fillTable("resultsList", data.map(r => [
+    r.fixtures ? `${r.fixtures.age_group} vs ${r.fixtures.opponent}` : "Fixture",
+    r.home_score,
+    r.away_score
+  ]), 3);
+}
+
+async function loadAnnouncements() {
+  const { data, error } = await supabase
+    .from("announcements")
+    .select("title,status,created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  fillTable("announcementsList", data.map(a => [
+    a.title,
+    a.status,
+    new Date(a.created_at).toLocaleDateString()
+  ]), 3);
+}
+
+async function refreshAll() {
+  try {
+    showMessage("Loading academy records...");
+    const jobs = [loadCoaches(), loadFixtures(), loadResults(), loadAnnouncements()];
+    if (currentRole === "admin" || currentRole === "coach") {
+      jobs.push(loadPlayers());
+    }
+    await Promise.all(jobs);
+    showMessage("Dashboard loaded successfully.");
+  } catch (error) {
+    showMessage("Could not load records: " + error.message, true);
+  }
+}
+
+document.getElementById("tabs").addEventListener("click", event => {
+  const button = event.target.closest("button[data-tab]");
+  if (!button) return;
+
+  document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+
+  button.classList.add("active");
+  document.getElementById(button.dataset.tab).classList.add("active");
+});
+
+document.getElementById("playerForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (currentRole !== "admin") return showMessage("Administrator access required.", true);
+
+  try {
+    const { error } = await supabase.from("players").insert({
+      player_code: document.getElementById("playerCode").value.trim(),
+      age_group: document.getElementById("playerAge").value,
+      consent_status: document.getElementById("playerConsent").value
+    });
+    if (error) throw error;
+    event.target.reset();
+    await loadPlayers();
+    showMessage("Player added successfully.");
+  } catch (error) {
+    showMessage("Could not add player: " + error.message, true);
+  }
+});
+
+document.getElementById("coachForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!["admin","editor"].includes(currentRole)) return showMessage("You cannot add coaches.", true);
+
+  try {
+    const { error } = await supabase.from("coaches").insert({
+      display_name: document.getElementById("coachName").value.trim(),
+      role_title: document.getElementById("coachTitle").value.trim()
+    });
+    if (error) throw error;
+    event.target.reset();
+    await loadCoaches();
+    showMessage("Coach added successfully.");
+  } catch (error) {
+    showMessage("Could not add coach: " + error.message, true);
+  }
+});
+
+document.getElementById("fixtureForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!["admin","editor"].includes(currentRole)) return showMessage("You cannot add fixtures.", true);
+
+  try {
+    const { error } = await supabase.from("fixtures").insert({
+      age_group: document.getElementById("fixtureAge").value,
+      opponent: document.getElementById("opponent").value.trim(),
+      kickoff_at: new Date(document.getElementById("kickoff").value).toISOString(),
+      venue: document.getElementById("venue").value.trim()
+    });
+    if (error) throw error;
+    event.target.reset();
+    await loadFixtures();
+    showMessage("Fixture added successfully.");
+  } catch (error) {
+    showMessage("Could not add fixture: " + error.message, true);
+  }
+});
+
+document.getElementById("resultForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!["admin","editor"].includes(currentRole)) return showMessage("You cannot add results.", true);
+
+  try {
+    const home = Number(document.getElementById("homeScore").value);
+    const away = Number(document.getElementById("awayScore").value);
+    if (!Number.isInteger(home) || !Number.isInteger(away) || home < 0 || away < 0) {
+      throw new Error("Enter valid whole-number scores.");
+    }
+
+    const { error } = await supabase.from("results").insert({
+      fixture_id: document.getElementById("resultFixture").value,
+      home_score: home,
+      away_score: away
+    });
+    if (error) throw error;
+    event.target.reset();
+    await loadResults();
+    showMessage("Result saved successfully.");
+  } catch (error) {
+    showMessage("Could not save result: " + error.message, true);
+  }
+});
+
+document.getElementById("announcementForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!["admin","editor"].includes(currentRole)) return showMessage("You cannot manage announcements.", true);
+
+  try {
+    const status = document.getElementById("announcementStatus").value;
+    const { error } = await supabase.from("announcements").insert({
+      title: document.getElementById("announcementTitle").value.trim(),
+      body: document.getElementById("announcementBody").value.trim(),
+      status,
+      published_at: status === "published" ? new Date().toISOString() : null
+    });
+    if (error) throw error;
+    event.target.reset();
+    await loadAnnouncements();
+    showMessage("Announcement saved successfully.");
+  } catch (error) {
+    showMessage("Could not save announcement: " + error.message, true);
+  }
+});
+
+document.getElementById("logoutButton").addEventListener("click", async () => {
+  await supabase.auth.signOut();
+  window.location.replace("./admin-login.html");
+});
+
+if (await checkAccess()) {
+  setPermissions();
+  await refreshAll();
+}
+</script>
+
+</body>
+</html>
