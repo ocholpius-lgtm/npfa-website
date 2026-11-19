@@ -1,3 +1,3 @@
-export const SUPABASE_URL = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nbG5rdGphcHNmcWRybmxqbndjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUwNDU1NjEsImV4cCI6MjExMDYyMTU2MX0.JxNhioaOnhVurv_NVw3EgWKsy-LBaxsmehUVoqX8qCM";
+export const SUPABASE_URL = "https://nglnktjapsfqdrnljnwc.supabase.co/rest/v1/;
 
 export const SUPABASE_ANON_KEY = "sb_publishable_P9XOODkzvYV7VgTX7gpRzg_u7-4S-m3";
