@@ -327,7 +327,7 @@ function setPermissions() {
 async function loadPlayers() {
   const { data, error } = await supabase
     .from("players")
-    .select("player_code,age_group,consent_status,status")
+    .select(".select("id,display_name,role_title,assigned_age_groups,status,photo_url")   ")
     .order("created_at", { ascending: false });
 
   if (error) throw error;
