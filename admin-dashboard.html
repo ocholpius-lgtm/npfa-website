@@ -337,18 +337,117 @@ async function loadPlayers() {
   ]), 4);
 }
 
+
 async function loadCoaches() {
   const { data, error } = await supabase
     .from("coaches")
-    .select("display_name,role_title,status")
+    .select("id,display_name,role_title,assigned_age_groups,status")
     .order("created_at", { ascending: false });
 
   if (error) throw error;
 
-  fillTable("coachesList", data.map(c => [
-    c.display_name, c.role_title || "-", c.status
-  ]), 3);
+  const body = document.getElementById("coachesList");
+  body.replaceChildren();
+
+  if (!data.length) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = 5;
+    cell.textContent = "No coaches found.";
+    row.appendChild(cell);
+    body.appendChild(row);
+    return;
+  }
+
+  data.forEach(coach => {
+    const row = document.createElement("tr");
+
+    addCell(row, coach.display_name);
+    addCell(row, coach.role_title || "-");
+    addCell(row, (coach.assigned_age_groups || []).join(", "));
+    addCell(row, coach.status || "active");
+
+    const actionCell = document.createElement("td");
+    const editButton = document.createElement("button");
+
+    editButton.textContent = "Edit";
+    editButton.style.background = "#6f3438";
+    editButton.style.color = "white";
+
+    editButton.addEventListener("click", () => {
+      editCoach(coach);
+    });
+
+    actionCell.appendChild(editButton);
+    row.appendChild(actionCell);
+    body.appendChild(row);
+  });
 }
+
+async function editCoach(coach) {
+  if (!["admin", "editor"].includes(currentRole)) {
+    showMessage("You cannot edit coaches.", true);
+    return;
+  }
+
+  const name = prompt("Coach name:", coach.display_name);
+  if (name === null) return;
+
+  if (!name.trim()) {
+    showMessage("Coach name cannot be empty.", true);
+    return;
+  }
+
+  const title = prompt(
+    "Role or title:",
+    coach.role_title || ""
+  );
+  if (title === null) return;
+
+  const groups = prompt(
+    "Assigned age groups, separated by commas:",
+    (coach.assigned_age_groups || []).join(", ")
+  );
+  if (groups === null) return;
+
+  const status = prompt(
+    "Status (active or inactive):",
+    coach.status || "active"
+  );
+
+  if (status === null) return;
+
+  if (!["active", "inactive"].includes(status.trim().toLowerCase())) {
+    showMessage("Status must be active or inactive.", true);
+    return;
+  }
+
+  const ageGroups = groups
+    .split(",")
+    .map(group => group.trim())
+    .filter(Boolean);
+
+  try {
+    const { error } = await supabase
+      .from("coaches")
+      .update({
+        display_name: name.trim(),
+        role_title: title.trim(),
+        assigned_age_groups: ageGroups,
+        status: status.trim().toLowerCase()
+      })
+      .eq("id", coach.id);
+
+    if (error) throw error;
+
+    await loadCoaches();
+    showMessage("Coach updated successfully.");
+
+  } catch (error) {
+    showMessage("Could not update coach: " + error.message, true);
+  }
+  }
+                                    
 
 async function loadFixtures() {
   const { data, error } = await supabase
