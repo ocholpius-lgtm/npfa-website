@@ -31,16 +31,17 @@ header {
   flex-wrap:wrap;
   gap:12px;
 }
-header h1 { margin:0; font-size:21px; }
+header h1 { margin:0;font-size:21px; }
 header span { color:var(--blue); }
 button {
   border:0;
   border-radius:5px;
-  padding:11px 15px;
+  padding:10px 13px;
   cursor:pointer;
   font-weight:bold;
+  margin:2px;
 }
-.logout { background:var(--red);color:white; }
+.logout,.danger { background:var(--red);color:white; }
 nav {
   display:flex;
   gap:8px;
@@ -57,7 +58,7 @@ nav button.active {
   background:var(--maroon);
   color:white;
 }
-main { padding:20px; max-width:1100px; margin:auto; }
+main { padding:20px;max-width:1200px;margin:auto; }
 .panel {
   display:none;
   background:white;
@@ -66,7 +67,7 @@ main { padding:20px; max-width:1100px; margin:auto; }
   margin-bottom:20px;
 }
 .panel.active { display:block; }
-h2 { color:var(--maroon); margin-top:0; }
+h2 { color:var(--maroon);margin-top:0; }
 form {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
@@ -82,25 +83,47 @@ input,select,textarea {
   background:white;
 }
 textarea { min-height:90px; }
-form button {
+form button,.primary {
   background:var(--maroon);
   color:white;
   align-self:end;
 }
-.message { margin:12px 0; font-weight:bold; }
+.message { margin:12px 0;font-weight:bold; }
 table {
   width:100%;
   border-collapse:collapse;
-  min-width:550px;
+  min-width:650px;
 }
 th,td {
   border-bottom:1px solid #ddd;
   padding:11px;
   text-align:left;
+  vertical-align:middle;
 }
 th { background:#f1f1f1; }
 .table-wrap { overflow-x:auto; }
-.small-note { color:#666;font-size:13px; }
+.small-note { color:#666;font-size:13px;line-height:1.5; }
+.photo {
+  width:58px;
+  height:58px;
+  object-fit:cover;
+  border-radius:7px;
+  background:#eee;
+}
+.photo-placeholder {
+  display:inline-flex;
+  width:58px;
+  height:58px;
+  background:#eee;
+  border-radius:7px;
+  align-items:center;
+  justify-content:center;
+  color:#777;
+  font-size:12px;
+}
+.actions { min-width:180px; }
+.actions button { margin:3px 2px; }
+.secondary { background:var(--blue);color:#171719; }
 @media(max-width:600px) {
   main { padding:12px; }
   .panel { padding:14px; }
@@ -128,10 +151,14 @@ th { background:#f1f1f1; }
 
   <section id="players" class="panel active">
     <h2>Player Register</h2>
-    <p class="small-note">Use player codes rather than children's names.</p>
+    <p class="small-note">
+      Use player codes rather than children's names.
+      Only upload a player's photo when their parent or guardian has granted photo permission.
+    </p>
 
     <form id="playerForm">
       <input id="playerCode" placeholder="Player code" required>
+
       <select id="playerAge" required>
         <option value="">Select age group</option>
         <option>Under 7</option>
@@ -140,17 +167,29 @@ th { background:#f1f1f1; }
         <option>Under 13</option>
         <option>Under 15</option>
       </select>
-      <select id="playerConsent">
+
+      <select id="playerConsent" required>
         <option value="pending">Consent pending</option>
         <option value="granted">Consent granted</option>
         <option value="withdrawn">Consent withdrawn</option>
       </select>
+
+      <input id="playerPhoto" type="file" accept="image/*">
       <button type="submit">Add Player</button>
     </form>
 
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Player Code</th><th>Age Group</th><th>Consent</th><th>Status</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Player Code</th>
+            <th>Age Group</th>
+            <th>Consent</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
         <tbody id="playersList"></tbody>
       </table>
     </div>
@@ -162,12 +201,23 @@ th { background:#f1f1f1; }
     <form id="coachForm">
       <input id="coachName" placeholder="Coach name" required>
       <input id="coachTitle" placeholder="Role or title">
+      <input id="coachGroups" placeholder="Age groups, e.g. Under 7, Under 9">
+      <input id="coachPhoto" type="file" accept="image/*">
       <button type="submit">Add Coach</button>
     </form>
 
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Name</th><th>Role</th><th>Status</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Age Groups</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
         <tbody id="coachesList"></tbody>
       </table>
     </div>
@@ -191,11 +241,20 @@ th { background:#f1f1f1; }
       <button type="submit">Add Fixture</button>
     </form>
 
-    <p class="small-note">Fixtures are visible only to authorised staff in this database setup.</p>
+    <p class="small-note">
+      Fixtures are visible only to authorised staff according to your database permissions.
+    </p>
 
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Age Group</th><th>Opponent</th><th>Kickoff</th><th>Status</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Age Group</th>
+            <th>Opponent</th>
+            <th>Kickoff</th>
+            <th>Status</th>
+          </tr>
+        </thead>
         <tbody id="fixturesList"></tbody>
       </table>
     </div>
@@ -215,7 +274,9 @@ th { background:#f1f1f1; }
 
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Fixture</th><th>NPFA</th><th>Opponent</th></tr></thead>
+        <thead>
+          <tr><th>Fixture</th><th>NPFA</th><th>Opponent</th></tr>
+        </thead>
         <tbody id="resultsList"></tbody>
       </table>
     </div>
@@ -236,7 +297,9 @@ th { background:#f1f1f1; }
 
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Title</th><th>Status</th><th>Date</th></tr></thead>
+        <thead>
+          <tr><th>Title</th><th>Status</th><th>Date</th></tr>
+        </thead>
         <tbody id="announcementsList"></tbody>
       </table>
     </div>
@@ -251,7 +314,14 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const message = document.getElementById("globalMessage");
 let currentRole = null;
-let fixturesCache = [];
+
+const AGE_GROUPS = [
+  "Under 7",
+  "Under 9",
+  "Under 11",
+  "Under 13",
+  "Under 15"
+];
 
 function showMessage(text, isError = false) {
   message.textContent = text;
@@ -262,6 +332,43 @@ function addCell(row, value) {
   const cell = document.createElement("td");
   cell.textContent = value ?? "";
   row.appendChild(cell);
+  return cell;
+}
+
+function photoCell(url) {
+  const cell = document.createElement("td");
+
+  if (url) {
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = "Record photo";
+    img.className = "photo";
+    img.loading = "lazy";
+    img.onerror = () => {
+      img.replaceWith(makePlaceholder());
+    };
+    cell.appendChild(img);
+  } else {
+    cell.appendChild(makePlaceholder());
+  }
+
+  return cell;
+}
+
+function makePlaceholder() {
+  const span = document.createElement("span");
+  span.className = "photo-placeholder";
+  span.textContent = "No photo";
+  return span;
+}
+
+function actionButton(label, callback, style = "primary") {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = label;
+  button.className = style;
+  button.addEventListener("click", callback);
+  return button;
 }
 
 function fillTable(id, rows, columns) {
@@ -309,39 +416,362 @@ async function checkAccess() {
   return true;
 }
 
+function canManagePlayers() {
+  return currentRole === "admin";
+}
+
+function canManageCoaches() {
+  return ["admin", "editor"].includes(currentRole);
+}
+
+function canManageMatches() {
+  return ["admin", "editor"].includes(currentRole);
+}
+
 function setPermissions() {
   if (currentRole === "coach") {
     document.querySelector('[data-tab="players"]').remove();
     document.querySelector('[data-tab="announcements"]').remove();
-    document.getElementById("playerForm").remove();
-    document.getElementById("coachForm").remove();
-    document.getElementById("fixtureForm").remove();
-    document.getElementById("resultForm").remove();
+
+    document.getElementById("playerForm").hidden = true;
+    document.getElementById("coachForm").hidden = true;
+    document.getElementById("fixtureForm").hidden = true;
+    document.getElementById("resultForm").hidden = true;
+
+    document.querySelectorAll(".panel").forEach(panel => {
+      panel.classList.remove("active");
+    });
+    document.querySelectorAll("nav button").forEach(button => {
+      button.classList.remove("active");
+    });
+
+    document.getElementById("coaches").classList.add("active");
+    document.querySelector('[data-tab="coaches"]').classList.add("active");
   }
 
   if (currentRole === "editor") {
-    document.getElementById("playerForm").remove();
+    document.getElementById("playerForm").hidden = true;
   }
+}
+
+function validateImage(file) {
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    throw new Error("Please select an image file.");
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    throw new Error("Photo must be 5 MB or smaller.");
+  }
+}
+
+async function uploadPhoto(bucket, file) {
+  if (!file) return null;
+
+  validateImage(file);
+
+  const extension = file.name.split(".").pop().toLowerCase();
+  const safeExtension = /^[a-z0-9]+$/.test(extension) ? extension : "jpg";
+  const path = `${crypto.randomUUID()}.${safeExtension}`;
+
+  const { error } = await supabase.storage
+    .from(bucket)
+    .upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: file.type
+    });
+
+  if (error) throw error;
+
+  const { data } = supabase.storage
+    .from(bucket)
+    .getPublicUrl(path);
+
+  return {
+    url: data.publicUrl,
+    path
+  };
+}
+
+function storagePathFromUrl(bucket, url) {
+  if (!url) return null;
+
+  const marker = `/storage/v1/object/public/${bucket}/`;
+  const position = url.indexOf(marker);
+
+  if (position === -1) return null;
+
+  return decodeURIComponent(url.substring(position + marker.length));
+}
+
+async function deletePhoto(bucket, url) {
+  const path = storagePathFromUrl(bucket, url);
+  if (!path) return;
+
+  const { error } = await supabase.storage
+    .from(bucket)
+    .remove([path]);
+
+  if (error) {
+    console.warn("Old photo could not be deleted:", error.message);
+  }
+}
+
+function chooseImage() {
+  return new Promise(resolve => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.addEventListener("change", () => {
+      resolve(input.files?.[0] || null);
+    });
+
+    input.click();
+  });
 }
 
 async function loadPlayers() {
   const { data, error } = await supabase
     .from("players")
-    .select(".select("id,display_name,role_title,assigned_age_groups,status,photo_url")   ")
+    .select("id,player_code,age_group,consent_status,status,photo_url")
     .order("created_at", { ascending: false });
 
   if (error) throw error;
 
-  fillTable("playersList", data.map(p => [
-    p.player_code, p.age_group, p.consent_status, p.status
-  ]), 4);
+  const body = document.getElementById("playersList");
+  body.replaceChildren();
+
+  if (!data.length) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = 6;
+    cell.textContent = "No players found.";
+    row.appendChild(cell);
+    body.appendChild(row);
+    return;
+  }
+
+  data.forEach(player => {
+    const row = document.createElement("tr");
+
+    photoCell(player.photo_url).replaceWith;
+    row.appendChild(photoCell(player.photo_url));
+
+    addCell(row, player.player_code);
+    addCell(row, player.age_group);
+    addCell(row, player.consent_status);
+    addCell(row, player.status || "active");
+
+    const actions = document.createElement("td");
+    actions.className = "actions";
+
+    if (canManagePlayers()) {
+      actions.appendChild(actionButton("Edit", () => editPlayer(player)));
+
+      if (player.consent_status === "granted") {
+        actions.appendChild(actionButton(
+          player.photo_url ? "Replace photo" : "Add photo",
+          () => replacePlayerPhoto(player),
+          "secondary"
+        ));
+      }
+
+      if (player.photo_url) {
+        actions.appendChild(actionButton(
+          "Remove photo",
+          () => removePlayerPhoto(player),
+          "danger"
+        ));
+      }
+    }
+
+    row.appendChild(actions);
+    body.appendChild(row);
+  });
 }
 
+async function addPlayer(event) {
+  event.preventDefault();
+
+  if (!canManagePlayers()) {
+    showMessage("Administrator access required.", true);
+    return;
+  }
+
+  const consent = document.getElementById("playerConsent").value;
+  const file = document.getElementById("playerPhoto").files[0];
+
+  if (file && consent !== "granted") {
+    showMessage("Photo upload requires granted guardian consent.", true);
+    return;
+  }
+
+  let uploaded = null;
+
+  try {
+    if (file) {
+      uploaded = await uploadPhoto("player-photos", file);
+    }
+
+    const { error } = await supabase.from("players").insert({
+      player_code: document.getElementById("playerCode").value.trim(),
+      age_group: document.getElementById("playerAge").value,
+      consent_status: consent,
+      ...(uploaded ? { photo_url: uploaded.url } : {})
+    });
+
+    if (error) throw error;
+
+    event.target.reset();
+    await loadPlayers();
+    showMessage("Player added successfully.");
+  } catch (error) {
+    if (uploaded) await deletePhoto("player-photos", uploaded.url);
+    showMessage("Could not add player: " + error.message, true);
+  }
+}
+
+async function editPlayer(player) {
+  if (!canManagePlayers()) return;
+
+  const code = prompt("Player code:", player.player_code);
+  if (code === null) return;
+
+  if (!code.trim()) {
+    showMessage("Player code cannot be empty.", true);
+    return;
+  }
+
+  const age = prompt(
+    "Age group:",
+    player.age_group
+  );
+  if (age === null) return;
+
+  if (!AGE_GROUPS.includes(age.trim())) {
+    showMessage("Please enter a valid age group.", true);
+    return;
+  }
+
+  const consent = prompt(
+    "Consent status: pending, granted or withdrawn",
+    player.consent_status
+  );
+  if (consent === null) return;
+
+  const normalConsent = consent.trim().toLowerCase();
+
+  if (!["pending", "granted", "withdrawn"].includes(normalConsent)) {
+    showMessage("Invalid consent status.", true);
+    return;
+  }
+
+  const status = prompt(
+    "Player status (active or inactive):",
+    player.status || "active"
+  );
+  if (status === null) return;
+
+  if (!["active", "inactive"].includes(status.trim().toLowerCase())) {
+    showMessage("Status must be active or inactive.", true);
+    return;
+  }
+
+  try {
+    const updates = {
+      player_code: code.trim(),
+      age_group: age.trim(),
+      consent_status: normalConsent,
+      status: status.trim().toLowerCase()
+    };
+
+    if (normalConsent !== "granted" && player.photo_url) {
+      updates.photo_url = null;
+    }
+
+    const { error } = await supabase
+      .from("players")
+      .update(updates)
+      .eq("id", player.id);
+
+    if (error) throw error;
+
+    if (normalConsent !== "granted" && player.photo_url) {
+      await deletePhoto("player-photos", player.photo_url);
+    }
+
+    await loadPlayers();
+    showMessage("Player updated successfully.");
+  } catch (error) {
+    showMessage("Could not update player: " + error.message, true);
+  }
+}
+
+async function replacePlayerPhoto(player) {
+  if (!canManagePlayers()) return;
+
+  if (player.consent_status !== "granted") {
+    showMessage("Guardian consent must be granted before uploading a photo.", true);
+    return;
+  }
+
+  const file = await chooseImage();
+  if (!file) return;
+
+  let uploaded = null;
+
+  try {
+    uploaded = await uploadPhoto("player-photos", file);
+
+    const { error } = await supabase
+      .from("players")
+      .update({ photo_url: uploaded.url })
+      .eq("id", player.id);
+
+    if (error) throw error;
+
+    if (player.photo_url) {
+      await deletePhoto("player-photos", player.photo_url);
+    }
+
+    await loadPlayers();
+    showMessage("Player photo updated successfully.");
+  } catch (error) {
+    if (uploaded) await deletePhoto("player-photos", uploaded.url);
+    showMessage("Could not update photo: " + error.message, true);
+  }
+}
+
+async function removePlayerPhoto(player) {
+  if (!canManagePlayers()) return;
+  if (!confirm("Remove this player's photo?")) return;
+
+  try {
+    const { error } = await supabase
+      .from("players")
+      .update({ photo_url: null })
+      .eq("id", player.id);
+
+    if (error) throw error;
+
+    if (player.photo_url) {
+      await deletePhoto("player-photos", player.photo_url);
+    }
+
+    await loadPlayers();
+    showMessage("Player photo removed.");
+  } catch (error) {
+    showMessage("Could not remove photo: " + error.message, true);
+  }
+}
 
 async function loadCoaches() {
   const { data, error } = await supabase
     .from("coaches")
-    .select("id,display_name,role_title,assigned_age_groups,status")
+    .select("id,display_name,role_title,assigned_age_groups,status,photo_url")
     .order("created_at", { ascending: false });
 
   if (error) throw error;
@@ -352,7 +782,7 @@ async function loadCoaches() {
   if (!data.length) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 5;
+    cell.colSpan = 6;
     cell.textContent = "No coaches found.";
     row.appendChild(cell);
     body.appendChild(row);
@@ -362,291 +792,11 @@ async function loadCoaches() {
   data.forEach(coach => {
     const row = document.createElement("tr");
 
+    row.appendChild(photoCell(coach.photo_url));
     addCell(row, coach.display_name);
     addCell(row, coach.role_title || "-");
     addCell(row, (coach.assigned_age_groups || []).join(", "));
     addCell(row, coach.status || "active");
 
-    const actionCell = document.createElement("td");
-    const editButton = document.createElement("button");
-
-    editButton.textContent = "Edit";
-    editButton.style.background = "#6f3438";
-    editButton.style.color = "white";
-
-    editButton.addEventListener("click", () => {
-      editCoach(coach);
-    });
-
-    actionCell.appendChild(editButton);
-    row.appendChild(actionCell);
-    body.appendChild(row);
-  });
-}
-
-async function editCoach(coach) {
-  if (!["admin", "editor"].includes(currentRole)) {
-    showMessage("You cannot edit coaches.", true);
-    return;
-  }
-
-  const name = prompt("Coach name:", coach.display_name);
-  if (name === null) return;
-
-  if (!name.trim()) {
-    showMessage("Coach name cannot be empty.", true);
-    return;
-  }
-
-  const title = prompt(
-    "Role or title:",
-    coach.role_title || ""
-  );
-  if (title === null) return;
-
-  const groups = prompt(
-    "Assigned age groups, separated by commas:",
-    (coach.assigned_age_groups || []).join(", ")
-  );
-  if (groups === null) return;
-
-  const status = prompt(
-    "Status (active or inactive):",
-    coach.status || "active"
-  );
-
-  if (status === null) return;
-
-  if (!["active", "inactive"].includes(status.trim().toLowerCase())) {
-    showMessage("Status must be active or inactive.", true);
-    return;
-  }
-
-  const ageGroups = groups
-    .split(",")
-    .map(group => group.trim())
-    .filter(Boolean);
-
-  try {
-    const { error } = await supabase
-      .from("coaches")
-      .update({
-        display_name: name.trim(),
-        role_title: title.trim(),
-        assigned_age_groups: ageGroups,
-        status: status.trim().toLowerCase()
-      })
-      .eq("id", coach.id);
-
-    if (error) throw error;
-
-    await loadCoaches();
-    showMessage("Coach updated successfully.");
-
-  } catch (error) {
-    showMessage("Could not update coach: " + error.message, true);
-  }
-  }
-                                    
-
-async function loadFixtures() {
-  const { data, error } = await supabase
-    .from("fixtures")
-    .select("id,age_group,opponent,kickoff_at,status")
-    .order("kickoff_at", { ascending: true });
-
-  if (error) throw error;
-  fixturesCache = data;
-
-  fillTable("fixturesList", data.map(f => [
-    f.age_group,
-    f.opponent,
-    new Date(f.kickoff_at).toLocaleString(),
-    f.status
-  ]), 4);
-
-  const select = document.getElementById("resultFixture");
-  select.replaceChildren();
-  const placeholder = document.createElement("option");
-  placeholder.value = "";
-  placeholder.textContent = "Select completed fixture";
-  select.appendChild(placeholder);
-
-  data.forEach(f => {
-    const option = document.createElement("option");
-    option.value = f.id;
-    option.textContent = `${f.age_group} vs ${f.opponent}`;
-    select.appendChild(option);
-  });
-}
-
-async function loadResults() {
-  const { data, error } = await supabase
-    .from("results")
-    .select("home_score,away_score,fixtures(age_group,opponent)");
-
-  if (error) throw error;
-
-  fillTable("resultsList", data.map(r => [
-    r.fixtures ? `${r.fixtures.age_group} vs ${r.fixtures.opponent}` : "Fixture",
-    r.home_score,
-    r.away_score
-  ]), 3);
-}
-
-async function loadAnnouncements() {
-  const { data, error } = await supabase
-    .from("announcements")
-    .select("title,status,created_at")
-    .order("created_at", { ascending: false });
-
-  if (error) throw error;
-
-  fillTable("announcementsList", data.map(a => [
-    a.title,
-    a.status,
-    new Date(a.created_at).toLocaleDateString()
-  ]), 3);
-}
-
-async function refreshAll() {
-  try {
-    showMessage("Loading academy records...");
-    const jobs = [loadCoaches(), loadFixtures(), loadResults(), loadAnnouncements()];
-    if (currentRole === "admin" || currentRole === "coach") {
-      jobs.push(loadPlayers());
-    }
-    await Promise.all(jobs);
-    showMessage("Dashboard loaded successfully.");
-  } catch (error) {
-    showMessage("Could not load records: " + error.message, true);
-  }
-}
-
-document.getElementById("tabs").addEventListener("click", event => {
-  const button = event.target.closest("button[data-tab]");
-  if (!button) return;
-
-  document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
-  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-
-  button.classList.add("active");
-  document.getElementById(button.dataset.tab).classList.add("active");
-});
-
-document.getElementById("playerForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  if (currentRole !== "admin") return showMessage("Administrator access required.", true);
-
-  try {
-    const { error } = await supabase.from("players").insert({
-      player_code: document.getElementById("playerCode").value.trim(),
-      age_group: document.getElementById("playerAge").value,
-      consent_status: document.getElementById("playerConsent").value
-    });
-    if (error) throw error;
-    event.target.reset();
-    await loadPlayers();
-    showMessage("Player added successfully.");
-  } catch (error) {
-    showMessage("Could not add player: " + error.message, true);
-  }
-});
-
-document.getElementById("coachForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  if (!["admin","editor"].includes(currentRole)) return showMessage("You cannot add coaches.", true);
-
-  try {
-    const { error } = await supabase.from("coaches").insert({
-      display_name: document.getElementById("coachName").value.trim(),
-      role_title: document.getElementById("coachTitle").value.trim()
-    });
-    if (error) throw error;
-    event.target.reset();
-    await loadCoaches();
-    showMessage("Coach added successfully.");
-  } catch (error) {
-    showMessage("Could not add coach: " + error.message, true);
-  }
-});
-
-document.getElementById("fixtureForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  if (!["admin","editor"].includes(currentRole)) return showMessage("You cannot add fixtures.", true);
-
-  try {
-    const { error } = await supabase.from("fixtures").insert({
-      age_group: document.getElementById("fixtureAge").value,
-      opponent: document.getElementById("opponent").value.trim(),
-      kickoff_at: new Date(document.getElementById("kickoff").value).toISOString(),
-      venue: document.getElementById("venue").value.trim()
-    });
-    if (error) throw error;
-    event.target.reset();
-    await loadFixtures();
-    showMessage("Fixture added successfully.");
-  } catch (error) {
-    showMessage("Could not add fixture: " + error.message, true);
-  }
-});
-
-document.getElementById("resultForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  if (!["admin","editor"].includes(currentRole)) return showMessage("You cannot add results.", true);
-
-  try {
-    const home = Number(document.getElementById("homeScore").value);
-    const away = Number(document.getElementById("awayScore").value);
-    if (!Number.isInteger(home) || !Number.isInteger(away) || home < 0 || away < 0) {
-      throw new Error("Enter valid whole-number scores.");
-    }
-
-    const { error } = await supabase.from("results").insert({
-      fixture_id: document.getElementById("resultFixture").value,
-      home_score: home,
-      away_score: away
-    });
-    if (error) throw error;
-    event.target.reset();
-    await loadResults();
-    showMessage("Result saved successfully.");
-  } catch (error) {
-    showMessage("Could not save result: " + error.message, true);
-  }
-});
-
-document.getElementById("announcementForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  if (!["admin","editor"].includes(currentRole)) return showMessage("You cannot manage announcements.", true);
-
-  try {
-    const status = document.getElementById("announcementStatus").value;
-    const { error } = await supabase.from("announcements").insert({
-      title: document.getElementById("announcementTitle").value.trim(),
-      body: document.getElementById("announcementBody").value.trim(),
-      status,
-      published_at: status === "published" ? new Date().toISOString() : null
-    });
-    if (error) throw error;
-    event.target.reset();
-    await loadAnnouncements();
-    showMessage("Announcement saved successfully.");
-  } catch (error) {
-    showMessage("Could not save announcement: " + error.message, true);
-  }
-});
-
-document.getElementById("logoutButton").addEventListener("click", async () => {
-  await supabase.auth.signOut();
-  window.location.replace("./admin-login.html");
-});
-
-if (await checkAccess()) {
-  setPermissions();
-  await refreshAll();
-}
-</script>
-
-</body>
-</html>
+    const actions = document.createElement("td");
+    actions.className = "actions"
