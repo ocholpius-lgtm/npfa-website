@@ -1,27 +1,557 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Naivasha Premier Soccer Academy develops young football talent through discipline, teamwork and excellence."><title>Naivasha Premier Soccer Academy | NPSA</title>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Naivasha Premier Soccer Academy develops young football talent through discipline, teamwork and excellence.">
+<title>Naivasha Premier Soccer Academy | NPSA</title>
+
 <style>
-:root{--maroon:#6f3438;--blue:#78b5dc;--red:#c92f32;--dark:#171719;--light:#f5f6f8}*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;line-height:1.6;color:var(--dark)}header{background:var(--dark);color:white;padding:12px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}.brand{display:flex;align-items:center;gap:12px;color:white;text-decoration:none;font-size:clamp(17px,2.4vw,23px);font-weight:800}.brand span{color:var(--blue)}.crest{width:66px;height:66px;object-fit:contain;background:#fff;border-radius:50%;padding:3px}header span{color:var(--blue)}nav{display:flex;flex-wrap:wrap;gap:13px}nav a{color:white;text-decoration:none;font-weight:bold}.hero{background:linear-gradient(120deg,var(--maroon),var(--dark));color:white;text-align:center;padding:85px 20px}.hero h2{font-size:clamp(29px,5vw,44px);margin-bottom:15px}.hero p{max-width:680px;margin:auto;font-size:18px}.button{display:inline-block;background:var(--red);color:white;padding:12px 22px;margin-top:22px;text-decoration:none;border-radius:5px}section{padding:55px 7%}section h2{text-align:center;color:var(--maroon);margin-bottom:25px;font-size:29px}.about,.coaches,.updates{background:var(--light)}.about{text-align:center}.about p{max-width:750px;margin:auto}.groups,.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}.group{background:var(--maroon);color:white;padding:22px;text-align:center;border-radius:7px;font-weight:bold}.coach,.card{background:white;padding:20px;border-radius:8px;box-shadow:0 3px 10px #0001}.coach{text-align:center}.coach img{width:100%;height:190px;object-fit:cover;border-radius:6px;margin-bottom:10px}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.gallery figure{background:white;padding:10px;border-radius:9px;box-shadow:0 3px 10px #0001}.gallery img{width:100%;height:240px;object-fit:cover;border-radius:6px;display:block}.gallery figcaption{text-align:center;font-weight:bold;color:var(--maroon);padding:8px 4px}.gallery-section{background:var(--light)}.coach h3,.card h3{color:var(--maroon)}.card .date,.muted,.status{color:#666;font-size:13px}.card .date{margin:7px 0}.empty{text-align:center;background:white;padding:18px;border-radius:8px;color:#666}.contact{text-align:center}.contact p{margin:5px}footer{background:var(--dark);color:white;text-align:center;padding:20px}.status{text-align:center;margin-top:10px}@media(max-width:600px){header{justify-content:center;text-align:center}nav{justify-content:center}section{padding:42px 6%}}
-</style></head><body>
-<header><a class="brand" href="#home"><img class="crest" src="assets/npsa-crest.jpg" alt="Naivasha Premier Soccer Academy crest"><span>NAIVASHA PREMIER<br>SOCCER ACADEMY</span></a><nav><a href="#home">Home</a><a href="#about">About</a><a href="#groups">Age Groups</a><a href="#coaches">Coaches</a><a href="#gallery">Gallery</a><a href="#fixtures">Fixtures</a><a href="#results">Results</a><a href="#announcements">News</a><a href="#contact">Contact</a></nav></header>
-<section class="hero" id="home"><h2>Developing Tomorrow's Football Stars</h2><p>Naivasha Premier Soccer Academy is committed to developing young football talent through discipline, teamwork and excellence.</p><a class="button" href="#contact">Contact the Academy</a></section>
-<section class="about" id="about"><h2>About NPSA</h2><p>Naivasha Premier Soccer Academy provides young players with opportunities to learn football, develop their skills, build confidence and grow through teamwork and discipline.</p></section>
-<section id="groups"><h2>Our Age Groups</h2><div class="groups"><div class="group">Under 7</div><div class="group">Under 9</div><div class="group">Under 11</div><div class="group">Under 13</div><div class="group">Under 15</div></div></section>
-<section class="coaches" id="coaches"><h2>Our Coaching Team</h2><div class="cards" id="coachList"><article class="coach"><h3>Coach Bernard</h3><p>Coach</p></article><article class="coach"><h3>Coach Noah Ayuko</h3><p>Coach</p></article><article class="coach"><h3>Coach Samson Kaleki</h3><p>Coach</p></article></div><p class="status" id="coachStatus"></p></section>
-<section class="gallery-section" id="gallery"><h2>Academy Gallery</h2><div class="gallery"><figure><img src="assets/coach-portrait.jpg" alt="NPSA coach at the training ground" loading="lazy"><figcaption>Our Coaching Team</figcaption></figure><figure><img src="assets/coach-training.jpg" alt="NPSA coach supporting a young player" loading="lazy"><figcaption>Coaching and Player Development</figcaption></figure><figure><img src="assets/coach-player.jpg" alt="NPSA coach with an academy player" loading="lazy"><figcaption>Mentorship on the Pitch</figcaption></figure><figure><img src="assets/academy-team.jpg" alt="NPSA academy team and coach" loading="lazy"><figcaption>Our Academy Family</figcaption></figure></div></section>
-<section id="fixtures"><h2>Upcoming Fixtures</h2><div class="cards" id="fixtureList"><p class="empty">Loading fixtures…</p></div><p class="status" id="fixtureStatus"></p></section>
-<section class="updates" id="results"><h2>Recent Results</h2><div class="cards" id="resultList"><p class="empty">Loading results…</p></div><p class="status" id="resultStatus"></p></section>
-<section id="announcements"><h2>Academy Announcements</h2><div class="cards" id="announcementList"><p class="empty">Loading announcements…</p></div><p class="status" id="announcementStatus"></p></section>
-<section class="contact" id="contact"><h2>Contact NPSA</h2><p>Phone: 0711101346</p><p>Phone: 0791 867092</p><p>Naivasha, Kenya</p></section><footer><p>© 2026 Naivasha Premier Soccer Academy. All rights reserved.</p></footer>
+:root {
+  --maroon: #6f3438;
+  --blue: #78b5dc;
+  --red: #c92f32;
+  --dark: #171719;
+  --light: #f5f6f8;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--dark);
+}
+
+header {
+  background: var(--dark);
+  color: white;
+  padding: 18px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.brand {
+  color: white;
+  text-decoration: none;
+  font-size: clamp(18px, 2.5vw, 25px);
+  font-weight: 800;
+}
+
+.brand span {
+  color: var(--blue);
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: var(--blue);
+}
+
+.hero {
+  background: linear-gradient(120deg, var(--maroon), var(--dark));
+  color: white;
+  text-align: center;
+  padding: 90px 20px;
+}
+
+.hero h2 {
+  font-size: clamp(30px, 5vw, 46px);
+  margin-bottom: 15px;
+}
+
+.hero p {
+  max-width: 700px;
+  margin: auto;
+  font-size: 18px;
+}
+
+.button {
+  display: inline-block;
+  background: var(--red);
+  color: white;
+  padding: 12px 24px;
+  margin-top: 24px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+section {
+  padding: 55px 7%;
+}
+
+section h2 {
+  text-align: center;
+  color: var(--maroon);
+  margin-bottom: 25px;
+  font-size: 29px;
+}
+
+.about,
+.coaches,
+.updates {
+  background: var(--light);
+}
+
+.about {
+  text-align: center;
+}
+
+.about p {
+  max-width: 750px;
+  margin: auto;
+}
+
+.groups,
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 16px;
+}
+
+.group {
+  background: var(--maroon);
+  color: white;
+  padding: 24px;
+  text-align: center;
+  border-radius: 7px;
+  font-weight: bold;
+}
+
+.coach,
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px #0001;
+}
+
+.coach {
+  text-align: center;
+}
+
+.coach h3,
+.card h3 {
+  color: var(--maroon);
+}
+
+.coach img {
+  width: 100%;
+  max-height: 190px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.card .date,
+.muted,
+.status {
+  color: #666;
+  font-size: 13px;
+}
+
+.card .date {
+  margin: 7px 0;
+}
+
+.empty {
+  text-align: center;
+  background: white;
+  padding: 18px;
+  border-radius: 8px;
+  color: #666;
+}
+
+.contact {
+  text-align: center;
+}
+
+.contact p {
+  margin: 6px;
+}
+
+footer {
+  background: var(--dark);
+  color: white;
+  text-align: center;
+  padding: 22px;
+}
+
+.status {
+  text-align: center;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  header {
+    justify-content: center;
+    text-align: center;
+  }
+
+  nav {
+    justify-content: center;
+  }
+
+  section {
+    padding: 42px 6%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <a class="brand" href="#home">
+    NAIVASHA PREMIER<br>
+    <span>SOCCER ACADEMY</span>
+  </a>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#groups">Age Groups</a>
+    <a href="#coaches">Coaches</a>
+    <a href="#fixtures">Fixtures</a>
+    <a href="#results">Results</a>
+    <a href="#announcements">News</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <h2>Developing Tomorrow's Football Stars</h2>
+  <p>
+    Naivasha Premier Soccer Academy is committed to developing
+    young football talent through discipline, teamwork and excellence.
+  </p>
+  <a class="button" href="#contact">Contact the Academy</a>
+</section>
+
+<section class="about" id="about">
+  <h2>About NPSA</h2>
+  <p>
+    Naivasha Premier Soccer Academy provides young players with
+    opportunities to learn football, develop their skills, build
+    confidence and grow through teamwork and discipline.
+  </p>
+</section>
+
+<section id="groups">
+  <h2>Our Age Groups</h2>
+  <div class="groups">
+    <div class="group">Under 7</div>
+    <div class="group">Under 9</div>
+    <div class="group">Under 11</div>
+    <div class="group">Under 13</div>
+    <div class="group">Under 15</div>
+  </div>
+</section>
+
+<section class="coaches" id="coaches">
+  <h2>Our Coaching Team</h2>
+  <div class="cards" id="coachList">
+    <article class="coach">
+      <h3>Coach Bernard</h3>
+      <p>Coach</p>
+    </article>
+    <article class="coach">
+      <h3>Coach Noah Ayuko</h3>
+      <p>Coach</p>
+    </article>
+    <article class="coach">
+      <h3>Coach Samson Kaleki</h3>
+      <p>Coach</p>
+    </article>
+  </div>
+  <p class="status" id="coachStatus"></p>
+</section>
+
+<section id="fixtures">
+  <h2>Upcoming Fixtures</h2>
+  <div class="cards" id="fixtureList">
+    <p class="empty">Loading fixtures…</p>
+  </div>
+  <p class="status" id="fixtureStatus"></p>
+</section>
+
+<section class="updates" id="results">
+  <h2>Recent Results</h2>
+  <div class="cards" id="resultList">
+    <p class="empty">Loading results…</p>
+  </div>
+  <p class="status" id="resultStatus"></p>
+</section>
+
+<section id="announcements">
+  <h2>Academy Announcements</h2>
+  <div class="cards" id="announcementList">
+    <p class="empty">Loading announcements…</p>
+  </div>
+  <p class="status" id="announcementStatus"></p>
+</section>
+
+<section class="contact" id="contact">
+  <h2>Contact NPSA</h2>
+  <p>Phone: 0711101346</p>
+  <p>Phone: 0791 867092</p>
+  <p>Location: Naivasha, Kenya</p>
+</section>
+
+<footer>
+  <p>© 2026 Naivasha Premier Soccer Academy. All rights reserved.</p>
+</footer>
+
 <script type="module">
-import{createClient}from"https://esm.sh/@supabase/supabase-js@2";import{SUPABASE_URL,SUPABASE_ANON_KEY}from"./admin-config.js";
-const db=createClient(SUPABASE_URL,SUPABASE_ANON_KEY),$=id=>document.getElementById(id);
-function empty(box,msg){box.replaceChildren();let p=document.createElement("p");p.className="empty";p.textContent=msg;box.append(p)}
-function date(v){if(!v)return"";let d=new Date(v);return isNaN(d)?String(v):d.toLocaleString("en-KE",{dateStyle:"medium",timeStyle:"short"})}
-function card(title,sub,body){let a=document.createElement("article");a.className="card";let h=document.createElement("h3");h.textContent=title||"Academy update";a.append(h);if(sub){let p=document.createElement("p");p.className="date";p.textContent=sub;a.append(p)}if(body){let p=document.createElement("p");p.textContent=body;a.append(p)}return a}
-async function coaches(){let box=$("coachList");try{let{data,error}=await db.from("coaches").select("display_name,role_title,assigned_age_groups,photo_url,status").eq("status","active").order("created_at",{ascending:false});if(error)throw error;if(!data?.length){empty(box,"Coaching team details will be updated soon.");return}box.replaceChildren();data.forEach(c=>{let a=document.createElement("article");a.className="coach";if(c.photo_url){let im=document.createElement("img");im.src=c.photo_url;im.alt="Photo of "+(c.display_name||"coach");im.loading="lazy";a.append(im)}let h=document.createElement("h3");h.textContent=c.display_name||"Coach";let p=document.createElement("p");p.textContent=c.role_title||"Coach";let g=document.createElement("p");g.className="muted";g.textContent=Array.isArray(c.assigned_age_groups)?c.assigned_age_groups.join(", "):"";a.append(h,p,g);box.append(a)})}catch(e){$("coachStatus").textContent="Live coach information is temporarily unavailable."}}
-async function fixtures(){let box=$("fixtureList");try{let{data,error}=await db.from("fixtures").select("age_group,opponent,kickoff,venue,status").gte("kickoff",new Date().toISOString()).order("kickoff").limit(12);if(error)throw error;if(!data?.length){empty(box,"No upcoming fixtures have been published yet.");return}box.replaceChildren();data.forEach(f=>box.append(card((f.age_group||"Academy")+" vs "+(f.opponent||"Opponent"),date(f.kickoff),(f.venue||"Venue to be confirmed")+(f.status?" • "+f.status:""))))}catch(e){$("fixtureStatus").textContent="Fixture information is temporarily unavailable."}}
-async function results(){let box=$("resultList");try{let{data,error}=await db.from("results").select("fixture_id,home_score,away_score,created_at").order("created_at",{ascending:false}).limit(10);if(error)throw error;if(!data?.length){empty(box,"Match results will appear here after they are added.");return}let ids=[...new Set(data.map(r=>r.fixture_id).filter(Boolean))],fs=[];if(ids.length){let q=await db.from("fixtures").select("id,age_group,opponent").in("id",ids);if(q.error)throw q.error;fs=q.data||[]}let map=new Map(fs.map(f=>[f.id,f]));box.replaceChildren();data.forEach(r=>{let f=map.get(r.fixture_id);box.append(card((f?.age_group?f.age_group+" • ":"")+"NPSA vs "+(f?.opponent||"Opponent"),date(r.created_at),String(r.home_score??"–")+" : "+String(r.away_score??"–")))})}catch(e){$("resultStatus").textContent="Result information is temporarily unavailable."}}
-async function announcements(){let box=$("announcementList");try{let{data,error}=await db.from("announcements").select("title,body,created_at,status").eq("status","published").order("created_at",{ascending:false}).limit(8);if(error)throw error;if(!data?.length){empty(box,"There are no current announcements.");return}box.replaceChildren();data.forEach(a=>box.append(card(a.title,date(a.created_at),a.body)))}catch(e){$("announcementStatus").textContent="Announcements are temporarily unavailable."}}
-await Promise.all([coaches(),fixtures(),results(),announcements()]);
-</script></body></html>
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./admin-config.js";
+
+const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const $ = id => document.getElementById(id);
+
+function empty(box, message) {
+  box.replaceChildren();
+  const p = document.createElement("p");
+  p.className = "empty";
+  p.textContent = message;
+  box.append(p);
+}
+
+function date(value) {
+  if (!value) return "";
+  const d = new Date(value);
+  return isNaN(d) ? String(value) :
+    d.toLocaleString("en-KE", {
+      dateStyle: "medium",
+      timeStyle: "short"
+    });
+}
+
+function card(title, subtitle, body) {
+  const article = document.createElement("article");
+  article.className = "card";
+
+  const heading = document.createElement("h3");
+  heading.textContent = title || "Academy update";
+  article.append(heading);
+
+  if (subtitle) {
+    const p = document.createElement("p");
+    p.className = "date";
+    p.textContent = subtitle;
+    article.append(p);
+  }
+
+  if (body) {
+    const p = document.createElement("p");
+    p.textContent = body;
+    article.append(p);
+  }
+
+  return article;
+}
+
+async function coaches() {
+  const box = $("coachList");
+
+  try {
+    const { data, error } = await db
+      .from("coaches")
+      .select("display_name,role_title,assigned_age_groups,photo_url,status")
+      .eq("status", "active")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    if (!data?.length) {
+      empty(box, "Coaching team details will be updated soon.");
+      return;
+    }
+
+    box.replaceChildren();
+
+    data.forEach(c => {
+      const article = document.createElement("article");
+      article.className = "coach";
+
+      if (c.photo_url) {
+        const image = document.createElement("img");
+        image.src = c.photo_url;
+        image.alt = "Photo of " + (c.display_name || "coach");
+        image.loading = "lazy";
+        article.append(image);
+      }
+
+      const heading = document.createElement("h3");
+      heading.textContent = c.display_name || "Coach";
+
+      const role = document.createElement("p");
+      role.textContent = c.role_title || "Coach";
+
+      const groups = document.createElement("p");
+      groups.className = "muted";
+      groups.textContent = Array.isArray(c.assigned_age_groups)
+        ? c.assigned_age_groups.join(", ")
+        : "";
+
+      article.append(heading, role, groups);
+      box.append(article);
+    });
+  } catch (e) {
+    $("coachStatus").textContent =
+      "Live coach information is temporarily unavailable.";
+  }
+}
+
+async function fixtures() {
+  const box = $("fixtureList");
+
+  try {
+    const { data, error } = await db
+      .from("fixtures")
+      .select("age_group,opponent,kickoff,venue,status")
+      .gte("kickoff", new Date().toISOString())
+      .order("kickoff")
+      .limit(12);
+
+    if (error) throw error;
+
+    if (!data?.length) {
+      empty(box, "No upcoming fixtures have been published yet.");
+      return;
+    }
+
+    box.replaceChildren();
+
+    data.forEach(f => {
+      box.append(card(
+        (f.age_group || "Academy") + " vs " + (f.opponent || "Opponent"),
+        date(f.kickoff),
+        (f.venue || "Venue to be confirmed") +
+          (f.status ? " • " + f.status : "")
+      ));
+    });
+  } catch (e) {
+    $("fixtureStatus").textContent =
+      "Fixture information is temporarily unavailable.";
+  }
+}
+
+async function results() {
+  const box = $("resultList");
+
+  try {
+    const { data, error } = await db
+      .from("results")
+      .select("fixture_id,home_score,away_score,created_at")
+      .order("created_at", { ascending: false })
+      .limit(10);
+
+    if (error) throw error;
+
+    if (!data?.length) {
+      empty(box, "Match results will appear here after they are added.");
+      return;
+    }
+
+    const ids = [...new Set(
+      data.map(r => r.fixture_id).filter(Boolean)
+    )];
+
+    let fixturesData = [];
+
+    if (ids.length) {
+      const q = await db
+        .from("fixtures")
+        .select("id,age_group,opponent")
+        .in("id", ids);
+
+      if (q.error) throw q.error;
+      fixturesData = q.data || [];
+    }
+
+    const map = new Map(
+      fixturesData.map(f => [f.id, f])
+    );
+
+    box.replaceChildren();
+
+    data.forEach(r => {
+      const f = map.get(r.fixture_id);
+
+      box.append(card(
+        (f?.age_group ? f.age_group + " • " : "") +
+          "NPSA vs " + (f?.opponent || "Opponent"),
+        date(r.created_at),
+        String(r.home_score ?? "–") +
+          " : " + String(r.away_score ?? "–")
+      ));
+    });
+  } catch (e) {
+    $("resultStatus").textContent =
+      "Result information is temporarily unavailable.";
+  }
+}
+
+async function announcements() {
+  const box = $("announcementList");
+
+  try {
+    const { data, error } = await db
+      .from("announcements")
+      .select("title,body,created_at,status")
+      .eq("status", "published")
+      .order("created_at", { ascending: false })
+      .limit(8);
+
+    if (error) throw error;
+
+    if (!data?.length) {
+      empty(box, "There are no current announcements.");
+      return;
+    }
+
+    box.replaceChildren();
+
+    data.forEach(a => {
+      box.append(card(
+        a.title,
+        date(a.created_at),
+        a.body
+      ));
+    });
+  } catch (e) {
+    $("announcementStatus").textContent =
+      "Announcements are temporarily unavailable.";
+  }
+}
+
+await Promise.all([
+  coaches(),
+  fixtures(),
+  results(),
+  announcements()
+]);
+</script>
+
+</body>
+</html>
